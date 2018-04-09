@@ -1,0 +1,15 @@
+[package]
+name = "pic2social"
+version = "0.1.0"
+authors = ["Dominik Weidenfeld <dominik@sh0k.de>"]
+
+[dependencies]
+egg-mode = "0.12.0"
+tokio-core = "0.1.16"
+dotenv = "0.11.0"
+notify = "4.0.3"
+structopt = "0.2.6"
+error-chain = "0.11.0"
+
+[dev-dependencies]
+clippy = "0.0.193"

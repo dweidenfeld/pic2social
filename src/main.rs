@@ -36,9 +36,7 @@ struct Config {
 
 fn main() {
     let conf = Config::from_args();
-
-    dotenv::dotenv()
-        .expect("could not parse environment variables");
+    let _ = dotenv::dotenv();
 
     let core = reactor::Core::new()
         .expect("could not initialize core");

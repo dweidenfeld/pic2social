@@ -2,14 +2,10 @@ image: rust
 
 pipelines:
   default:
-#    - setup:
-#        script:
+    - step:
+        script:
 #          - rustup install nightly-x86_64-unknown-linux-gnu
 #          - cargo +nightly install clippy
-    - build:
-        script:
           - cargo build -v
-    - test:
-        script:
           - cargo test -v
 #          - cargo +nightly clippy -v

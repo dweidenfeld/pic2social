@@ -27,10 +27,10 @@ use structopt::StructOpt;
 #[derive(StructOpt, Debug)]
 #[structopt(name = "pic2social", about = "A social media image uploader with active directory watching")]
 struct Config {
-    #[structopt(short = "d", long = "directory", parse(from_os_str))]
+    #[structopt(short = "d", long = "directory", parse(from_os_str), env = "P2S_DIRECTORY")]
     directory: PathBuf,
 
-    #[structopt(short = "m", long = "message")]
+    #[structopt(short = "m", long = "message", env = "P2S_MESSAGE")]
     message: String,
 }
 

@@ -1,0 +1,8 @@
+image: rustlang/rust:nightly
+
+pipelines:
+  default:
+    - step:
+        script:
+          - cargo build -v
+          - cargo test -v

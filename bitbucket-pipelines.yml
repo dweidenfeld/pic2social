@@ -1,4 +1,4 @@
-image: rustlang/rust:nightly
+image: tomastomecek/rust:clippy
 
 pipelines:
   default:
@@ -6,3 +6,4 @@ pipelines:
         script:
           - cargo build -v
           - cargo test -v
+          - cargo clippy -v

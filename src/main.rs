@@ -1,5 +1,3 @@
-#![cfg_attr(test, feature(plugin))]
-#![cfg_attr(test, plugin(clippy))]
 #![feature(external_doc)]
 #![doc(include="../README.md")]
 

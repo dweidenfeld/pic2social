@@ -1,9 +1,15 @@
-image: tomastomecek/rust:clippy
+image: rust
 
 pipelines:
   default:
-    - step:
+#    - setup:
+#        script:
+#          - rustup install nightly-x86_64-unknown-linux-gnu
+#          - cargo +nightly install clippy
+    - build:
         script:
           - cargo build -v
+    - test:
+        script:
           - cargo test -v
-          - cargo clippy -v
+#          - cargo +nightly clippy -v

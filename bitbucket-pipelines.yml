@@ -1,11 +1,9 @@
-image: rust
+image: jimmycuadra/rust
 
 pipelines:
   default:
     - step:
         script:
-#          - rustup install nightly-x86_64-unknown-linux-gnu
-#          - cargo +nightly install clippy
-          - cargo build -v
-          - cargo test -v
-#          - cargo +nightly clippy -v
+          - rustup install nightly-x86_64-unknown-linux-gnu
+          - cargo +nightly test
+          - cargo +nightly build

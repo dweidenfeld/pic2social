@@ -41,6 +41,20 @@ pub mod errors {
 }
 use self::errors::ResultExt;
 
+#[derive(Eq, Ord, PartialOrd, PartialEq)]
+pub enum Plugin {
+    Unknown,
+    Twitter,
+}
+
+impl From<String> for Plugin {
+    fn from(s: String) -> Self {
+        match s.to_lowercase().as_str() {
+            _ => Plugin::Twitter,
+        }
+    }
+}
+
 fn read_file<F: AsRef<Path>>(path: F) -> errors::Result<Vec<u8>> {
     let mut file = File::open(path.as_ref())
         .chain_err(|| errors::ErrorKind::ImageReadError(path.as_ref().to_path_buf()))?;

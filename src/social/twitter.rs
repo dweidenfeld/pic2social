@@ -1,13 +1,14 @@
 use egg_mode::{self, KeyPair, Token};
 use egg_mode::media::{media_types, UploadBuilder};
 use egg_mode::tweet::DraftTweet;
-use std::{env, io};
+use std::io;
 use std::cell::RefCell;
 use std::path::Path;
 use super::errors;
 use super::errors::ResultExt;
 use super::read_file;
 use super::SocialUpload;
+use super::super::Config;
 use tokio_core::reactor;
 
 /// Twitter is the Twitter social plugin implementation.
@@ -20,17 +21,18 @@ pub struct Twitter {
 
 impl Twitter {
     /// Create a new Twitter social plugin instance.
-    pub fn new(core: RefCell<reactor::Core>) -> errors::Result<Twitter> {
-        let consumer_key = env::var("TWITTER_CONSUMER_KEY")
-            .chain_err(|| errors::ErrorKind::MissingEnvironmentVariableError("TWITTER_CONSUMER_KEY".to_string()))?;
+    pub fn new(core: RefCell<reactor::Core>, config: &Config) -> errors::Result<Twitter> {
+        let consumer_key = match config.consumer_key {
+            Some(value) => value,
+            None => bail!(errors::ErrorKind::MissingConfigurationError("consumer_key".to_string()))
+        };
 
-        let consumer_secret = env::var("TWITTER_CONSUMER_SECRET")
-            .chain_err(|| errors::ErrorKind::MissingEnvironmentVariableError("TWITTER_CONSUMER_SECRET".to_string()))?;
+        let consumer_secret = match config.consumer_secret {
+            Some(value) => value,
+            None => bail!(errors::ErrorKind::MissingConfigurationError("consumer_secret".to_string()))
+        };
 
-        let access_token = env::var("TWITTER_ACCESS_TOKEN").ok();
-        let access_token_secret = env::var("TWITTER_ACCESS_TOKEN_SECRET").ok();
-
-        if access_token.is_none() && access_token_secret.is_none() {
+        if config.access_token.is_none() && config.access_token_secret.is_none() {
             let token = authorize(&core, consumer_key, consumer_secret)?;
 
             return Ok(Twitter { core, token });
@@ -38,7 +40,7 @@ impl Twitter {
 
         let token = Token::Access {
             consumer: KeyPair::new(consumer_key, consumer_secret),
-            access: KeyPair::new(access_token.unwrap(), access_token_secret.unwrap()),
+            access: KeyPair::new(config.access_token.unwrap(), config.access_token_secret.unwrap()),
         };
 
         Ok(Twitter { core, token })

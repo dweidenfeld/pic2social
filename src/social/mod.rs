@@ -12,9 +12,9 @@ pub mod errors {
 
     error_chain! {
         errors {
-            MissingEnvironmentVariableError(variable: String) {
-                description("Missing environment variable")
-                display("Missing environment variable: {}", variable)
+            MissingConfigurationError(variable: String) {
+                description("Missing configuration")
+                display("Missing configuration for: {}", variable)
             }
 
             ImageReadError(path: PathBuf) {

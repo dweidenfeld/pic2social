@@ -18,18 +18,17 @@ pub struct Twitter {
     token: Token,
 }
 
-
 impl Twitter {
     /// Create a new Twitter social plugin instance.
     pub fn new(core: RefCell<reactor::Core>, config: &Config) -> errors::Result<Twitter> {
-        let consumer_key = match config.consumer_key {
-            Some(value) => value,
-            None => bail!(errors::ErrorKind::MissingConfigurationError("consumer_key".to_string()))
+        let consumer_key = match &config.consumer_key {
+            Some(value) => value.clone(),
+            None => return Err(errors::ErrorKind::MissingConfigurationError("consumer_key".to_string()))?
         };
 
-        let consumer_secret = match config.consumer_secret {
-            Some(value) => value,
-            None => bail!(errors::ErrorKind::MissingConfigurationError("consumer_secret".to_string()))
+        let consumer_secret = match &config.consumer_secret {
+            Some(value) => value.clone(),
+            None => return Err(errors::ErrorKind::MissingConfigurationError("consumer_secret".to_string()))?
         };
 
         if config.access_token.is_none() && config.access_token_secret.is_none() {
@@ -40,7 +39,7 @@ impl Twitter {
 
         let token = Token::Access {
             consumer: KeyPair::new(consumer_key, consumer_secret),
-            access: KeyPair::new(config.access_token.unwrap(), config.access_token_secret.unwrap()),
+            access: KeyPair::new(config.access_token.clone().unwrap(), config.access_token_secret.clone().unwrap()),
         };
 
         Ok(Twitter { core, token })

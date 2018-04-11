@@ -71,6 +71,8 @@ fn main() {
                 Err(e) => println!("Error uploading image: {} ({}) {:?}", conf.message, path.display(), e)
             };
         }
+
+        Ok(())
     }) {
         Ok(_) => (),
         Err(e) => panic!("{}", e)

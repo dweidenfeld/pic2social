@@ -65,13 +65,14 @@ mod tests {
         let check_file = tmp_file.clone();
 
         thread::spawn(move || {
-            match super::watch(&tmp_dir, |path| {
+            let watch_result =  super::watch(&tmp_dir, |path| {
                 assert_eq!(tmp_file.as_path(), &path);
 
                 Err(super::errors::ErrorKind::Abort)?
-            }) {
-                Ok(_) => panic!("The watching should abort"),
-                Err(_) => (),
+            });
+
+            if watch_result.is_ok() {
+                panic!("The watching should abort");
             }
         });
 

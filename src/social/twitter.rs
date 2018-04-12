@@ -131,6 +131,20 @@ mod tests {
 
     #[test]
     pub fn authorize_with_missing_tokens() {
+        let core = RefCell::new(reactor::Core::new().unwrap());
 
+        let config = super::Config {
+            plugin: "twitter".to_string(),
+            message: "".to_string(),
+            directory: PathBuf::from(""),
+            consumer_key: None,
+            consumer_secret: None,
+            access_token: None,
+            access_token_secret: None
+        };
+
+        if super::authorize(&core, &config).is_ok() {
+            panic!("Expected authorization to fail, because of missing tokens");
+        }
     }
 }

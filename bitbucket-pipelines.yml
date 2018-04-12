@@ -1,13 +1,16 @@
-image: jimmycuadra/rust
-
 pipelines:
   default:
     - step:
+        name: 'Test & Build'
+        image: jimmycuadra/rust
         script:
           - rustup install nightly-x86_64-unknown-linux-gnu
-          - cargo +nightly build
           - cargo +nightly test
-    - step:
-        script:
           - cargo +nightly build --release
+        artifacts:
+          - target/**
+    - step:
+        name: 'Publish Download'
+        image: tutum/curl
+        script:
           - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"target/release/pic2social"

@@ -1,16 +1,23 @@
 pipelines:
   default:
     - step:
-        name: 'Test & Build'
+        name: 'Test'
         image: jimmycuadra/rust
         script:
           - rustup install nightly-x86_64-unknown-linux-gnu
           - cargo +nightly test
-          - cargo +nightly build --release
+    - step:
+        name: 'Cross Compile'
+        image: jimmycuadra/rust
+        script:
+          - rustup install nightly-x86_64-unknown-linux-gnu
+#          - rustup target add x86_64-pc-windows-gnu
+          - cargo +nightly build --target x86_64-unknown-linux-gnu --release
+#          - cargo +nightly build --target x86_64-pc-windows-gnu --release
         artifacts:
-          - target/**
+          - target/x86_64-unknown-linux-gnu/release/pic2social
     - step:
         name: 'Publish Download'
         image: tutum/curl
         script:
-          - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"target/release/pic2social"
+          - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"target/x86_64-unknown-linux-gnu/release/pic2social"

@@ -4,6 +4,7 @@ pub mod twitter;
 use std::path::Path;
 use std::fs::File;
 use std::io::prelude::*;
+use std::str::FromStr;
 
 pub use self::social_upload::SocialUpload;
 
@@ -36,6 +37,11 @@ pub mod errors {
                 description("Authorization failed")
                 display("Authorization failed")
             }
+
+            UnknownPluginError {
+                description("Plugin type unknown")
+                display("Please use one of the available plugin types")
+            }
         }
     }
 }
@@ -43,14 +49,16 @@ use self::errors::ResultExt;
 
 #[derive(Eq, Ord, PartialOrd, PartialEq)]
 pub enum Plugin {
-    Unknown,
     Twitter,
 }
 
-impl From<String> for Plugin {
-    fn from(s: String) -> Self {
+impl FromStr for Plugin {
+    type Err = errors::ErrorKind;
+
+    fn from_str(s: &str) -> Result<Self, <Self as FromStr>::Err> {
         match s.to_lowercase().as_str() {
-            _ => Plugin::Twitter,
+            "twitter" => Ok(Plugin::Twitter),
+            _ => Err(errors::ErrorKind::UnknownPluginError)?
         }
     }
 }

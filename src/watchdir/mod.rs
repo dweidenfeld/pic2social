@@ -14,6 +14,7 @@ pub mod errors {
                 display("Starting watch on fs failed for path: {}", path.display())
             }
 
+            #[allow(dead_code)]
             Abort {
                 description("The file watching will stop")
                 display("The file watching should be aborted by internal decision")
@@ -58,7 +59,7 @@ mod tests {
     use std::fs::File;
 
     #[test]
-    pub fn watch_while_creating_some_file() {
+    pub fn watch_for_file() {
         let tmp_dir = env::temp_dir();
         let mut tmp_file = tmp_dir.clone();
         tmp_file.push("foo.txt");

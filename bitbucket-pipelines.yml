@@ -5,5 +5,9 @@ pipelines:
     - step:
         script:
           - rustup install nightly-x86_64-unknown-linux-gnu
-          - cargo +nightly test
           - cargo +nightly build
+          - cargo +nightly test
+    - step:
+        script:
+          - cargo +nightly build --release
+          - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"target/release/pic2social"
